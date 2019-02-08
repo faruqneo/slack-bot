@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/faruqneo/sheet#readme",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "googleapis": "^37.1.0",
+    "mongoose": "^5.4.10",
     "request": "^2.88.0"
   }
 }

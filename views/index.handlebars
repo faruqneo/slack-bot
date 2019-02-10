@@ -9,18 +9,18 @@ $(document).ready(function(){
 });
 </script>
 
-<h2>Sheet Table</h2>
+<h2>Sheet</h2>
+<p>Here i am trying to show data from google <a href="https://docs.google.com/spreadsheets/d/1H6WGjzEqzrB6b1eUgvrf-jERJrsxFWMFU7-sGaS6azY/edit#gid=0" target="_blank">#sheet</a>.</p>
 <input class="form-control" id="myInput" type="text" placeholder="Search.." style="width: 210px;">
 <br>
 <table class="table table-striped">
 <thead>
     <tr>      
-            <th>ID</th>     
-            <th>NAME</th>    
-            <th>PASSWORD</th>       
+        <th>ID</th>     
+        <th>NAME</th>    
+        <th>PASSWORD</th>       
     </tr>
 </thead>
-
 <tbody id="myTable">
     {{#each data}}
     <tr>

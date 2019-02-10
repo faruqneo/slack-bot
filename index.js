@@ -4,7 +4,7 @@ const dotenv = require('dotenv').config();
 const mongoose = require('mongoose');
 const exphbs  = require('express-handlebars');
 const Tokens = require('./model/token');
-var _ = require("underscore");
+const _ = require("underscore");
 
 
 //Connect with mongodb
@@ -51,7 +51,7 @@ const oauth2Client = new google.auth.OAuth2(
   });
 
 app.get('/callback', async(req,res) => {
-    var code = req.query.code ;
+    let code = req.query.code ;
     const {tokens} = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
   //  console.log(tokens)
@@ -111,19 +111,22 @@ app.get('/callback', async(req,res) => {
     sheets.spreadsheets.values.get(params)
       .then(sheet => {
        //console.log(sheet.data.values);
-
+        //collecting data on data object
        let data = [];
 
-       for(let i=1; i < sheet.data.values.length; i++)
+       for(let i=1; i < sheet.data.values.length; i++) 
        {
           data.push({"id": parseInt(sheet.data.values[i][0]), "name": sheet.data.values[i][1], "password": sheet.data.values[i][2]})
        }
        
-
        //data filter is working using underscore module
-       var filtered = _.where(data, {password: "789"});
+       let filtered = _.where(data, {password: "789"});
        console.log(filtered)
-        
+      //  for(let key in filtered)
+      //  {
+      //    console.log(`Name : ${filtered[key].name}`)
+      //  }
+       
        //data filter is working using jquery
         res.render('index',{
           data: data

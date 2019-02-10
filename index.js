@@ -123,10 +123,11 @@ app.get('/callback', async(req,res) => {
        //data filter is working using underscore module
        var filtered = _.where(data, {password: "789"});
        console.log(filtered)
-        //res.send(data)
-        // res.render('index',{
-        //   data: data
-        // })
+        
+       //data filter is working using jquery
+        res.render('index',{
+          data: data
+        })
       })
       .catch(error => {
         console.error(error);

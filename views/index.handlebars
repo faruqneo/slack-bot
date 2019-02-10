@@ -1,0 +1,36 @@
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
+<h2>Sheet Table</h2>
+<input class="form-control" id="myInput" type="text" placeholder="Search.." style="width: 210px;">
+<br>
+<table class="table table-striped">
+<thead>
+    <tr>      
+            <th>ID</th>     
+            <th>NAME</th>    
+            <th>PASSWORD</th>       
+    </tr>
+</thead>
+
+<tbody id="myTable">
+    {{#each data}}
+    <tr>
+        {{#each this}}       
+            <td>{{this}}</td>        
+        {{/each}}
+    </tr>
+    {{/each}}
+</tbody>
+</table>
+
+
+

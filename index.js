@@ -1,9 +1,11 @@
 const express = require('express')
 const {google} = require('googleapis');
 const dotenv = require('dotenv').config();
-const request = require('request')
 const mongoose = require('mongoose');
+const exphbs  = require('express-handlebars');
 const Tokens = require('./model/token');
+var _ = require("underscore");
+
 
 //Connect with mongodb
 mongoose.connect('mongodb://localhost/neo', { useNewUrlParser: true });
@@ -22,6 +24,9 @@ db.on('error',function(err){
 
 //Init app
 const app = express()
+
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.CLIENT_ID,
@@ -76,7 +81,8 @@ app.get('/callback', async(req,res) => {
         });
     }
   });
-  
+
+
   app.get('/sheet', async(req,res) => {
     try{
       let data = await Tokens.findOne({ 'admin':1 })
@@ -98,18 +104,38 @@ app.get('/callback', async(req,res) => {
      
     const params = {
       spreadsheetId: process.env.SPREAD_SHEET_ID,
-      range: process.env.ranges_to_find
+       range: 'Sheet1',
+       majorDimension: 'ROWS',  
     };
     
     sheets.spreadsheets.values.get(params)
-      .then(res => {
-        console.log(res);
-        //res.send(res);
+      .then(sheet => {
+       //console.log(sheet.data.values);
+
+       let data = [];
+
+       for(let i=1; i < sheet.data.values.length; i++)
+       {
+          data.push({"id": parseInt(sheet.data.values[i][0]), "name": sheet.data.values[i][1], "password": sheet.data.values[i][2]})
+       }
+       
+
+       //data filter is working using underscore module
+       var filtered = _.where(data, {password: "789"});
+       console.log(filtered)
+        //res.send(data)
+        // res.render('index',{
+        //   data: data
+        // })
       })
       .catch(error => {
         console.error(error);
-      });
-  })
+      }); 
+
+})
+
+
+
 
 app.listen('3000', function(){
   console.log('server is running.')

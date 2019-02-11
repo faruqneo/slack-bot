@@ -74,6 +74,9 @@ bot.on("message", function(data) {
   function handleMessage(message) {
     switch(message) {
         case "Hello world!":break;
+        case "joke":
+            chunckJock();
+            break;
         case "hello":
             sendGreeting();
             break;
@@ -85,9 +88,11 @@ bot.on("message", function(data) {
 
 
   function sendGreeting() {
-
+    const params = {
+      icon_emoji: ':perfect:'
+    };
     var greeting = getGreeting();
-    bot.postMessageToChannel('general', greeting);
+    bot.postMessageToChannel('general', greeting, params);
 }
   
   function getGreeting() {
@@ -101,16 +106,33 @@ bot.on("message", function(data) {
     return greetings[Math.floor(Math.random() * greetings.length)];
 }
 
+//chunckJock part
+function chunckJock()
+{
+  axios.get('http://api.icndb.com/jokes/random/')
+  .then(function (response) {
+    const params = {
+      icon_emoji: ':laugh:'
+    };
+    let joke = response.data.value.joke;
+    bot.postMessageToChannel('general', joke, params);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
 
+
+//calling spreadsheet data
   function spreadsheet(message){
-      console.log(message);
+      //console.log(message);
       axios.get('http://localhost:3000/sheet')
       .then(function (response) {
         //console.log(response);
         let filtered = _.where(response.data, {name: message});
         let key=0;
         const params = {
-          icon_emoji: ':notinterested:'
+          icon_emoji: ':surprise:'
         };
         if(key in filtered)
         {
@@ -205,26 +227,7 @@ app.get('/sheet', async(req,res) => {
     data.push({"id": parseInt(sheet.data.values[i][0]), "name": sheet.data.values[i][1], "password": sheet.data.values[i][2]})
     }
     res.send(data)
-      //console.log(sheet.data.values);
-      //collecting data on data object
-
-      // let data = [];
-
-      // for(let i=1; i < sheet.data.values.length; i++) 
-      // {
-      // data.push({"id": parseInt(sheet.data.values[i][0]), "name": sheet.data.values[i][1], "password": sheet.data.values[i][2]})
-      // }
-      
-      // //data filter is working using underscore module
-      // let filtered = _.where(data, {password: "789"});
-      // console.log(filtered)
-
-      
-  //  for(let key in filtered)
-  //  {
-  //    console.log(`Name : ${filtered[key].name}`)
-  //  }
-      
+           
       //data filter is working using jquery
       // res.render('index',{
       // data: data
